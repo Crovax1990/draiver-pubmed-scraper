@@ -1,4 +1,4 @@
-# Async PubMed Scraper
+# Draiver PubMed Scraper
 
 Asynchronous Python tool that scrapes [PubMed](https://pubmed.ncbi.nlm.nih.gov/) for scholarly article metadata and saves results to CSV.
 
