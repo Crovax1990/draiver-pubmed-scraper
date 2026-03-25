@@ -1,69 +1,57 @@
-# Asynchronous PubMed Scraper
+# Async PubMed Scraper
 
-## Quick Start
+Asynchronous Python tool that scrapes [PubMed](https://pubmed.ncbi.nlm.nih.gov/) for scholarly article metadata and saves results to CSV.
 
-Requires [uv](https://docs.astral.sh/uv/).
+Built with `aiohttp`, `asyncio`, and `BeautifulSoup` for fast concurrent HTTP scraping.
+
+## Requirements
+
+- Python 3.12+
+- [uv](https://docs.astral.sh/uv/) package manager
+
+## Installation
 
 ```bash
-# Install dependencies
 uv sync
-
-# Run with inline keywords
-uv run pubmed-scraper --keywords "cancer,diabetes" --pages 5 --start 2020 --stop 2024
-
-# Or with a keywords file (one keyword per line)
-echo -e "cancer\ndiabetes" > keywords.txt
-uv run pubmed-scraper --pages 5 --start 2020 --stop 2024
+uv sync --extra dev   # include pytest
 ```
 
 ## Usage
 
-```
+```bash
+# Inline keywords
+uv run pubmed-scraper --keywords "cancer,diabetes" --pages 10 --start 2019 --stop 2020
+
+# Keywords from file
+uv run pubmed-scraper --keywords-file my_keywords.txt --pages 10
+
+# Custom output path
+uv run pubmed-scraper --keywords "mRNA" --output results/vaccines.csv
+
+# Help
 uv run pubmed-scraper --help
-
-options:
-  --keywords "a,b,c"         Comma-separated keywords (alternative to keywords.txt)
-  --keywords-file PATH       Path to keywords file (default: keywords.txt)
-  --pages N                  Number of pages per keyword (10 articles/page, default: all)
-  --start YEAR               Start year for date range (default: 2019)
-  --stop YEAR                Stop year for date range (default: 2020)
-  --output FILE              Output CSV filename (default: articles.csv)
 ```
 
-At least one of `--keywords` or `keywords.txt` must be provided.
+Output is saved to `data/articles.csv` by default.
 
-## Example Usage and Data
+## CLI Arguments
 
-Collects at ~13 articles/second: url, title, abstract, authors, affiliations, journal, keywords, date.
+| Argument | Default | Description |
+|---|---|---|
+| `--keywords` | — | Comma-separated search keywords |
+| `--keywords-file` | `keywords.txt` | Path to file with one keyword per line |
+| `--pages` | all | Number of pages to scrape per keyword (10 articles/page) |
+| `--start` | 2019 | Start year for publication date range |
+| `--stop` | 2020 | Stop year for publication date range |
+| `--output` | `data/articles.csv` | Output CSV filename |
 
-![CLI usage example](https://raw.githubusercontent.com/IliaZenkov/async-pubmed-scraper/master/example/cli_usage_example.JPG)
-![Data example](https://raw.githubusercontent.com/IliaZenkov/async-pubmed-scraper/master/example/data_example.JPG)
-
-## What it does
-
-This script asynchronously scrapes PubMed — an open-access database of scholarly research articles —
-and saves the data to a pandas DataFrame which is then written to a CSV for further processing.
-
-## Why scrape when there's an API? Why asynchronous?
-
-PubMed's NCBI Entrez API allows only 3 requests/second (10/second with API key).
-This scraper uses `asyncio` + `aiohttp` to send thousands of requests in parallel,
-achieving ~10x speedup over synchronous scraping.
-
-## Development
+## Testing
 
 ```bash
-uv sync --extra dev
-
-# Run tests
 uv run pytest
-uv run pytest tests/test_scraper.py::test_extract_by_article -v  # single test
-
-# Lint (if ruff is added)
-uv run ruff check .
-uv run ruff format .
+uv run pytest tests/test_scraper.py -v
 ```
 
 ## License
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/IliaZenkov/async-pubmed-scraper/blob/master/LICENSE)
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

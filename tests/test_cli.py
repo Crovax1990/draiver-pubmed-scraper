@@ -87,7 +87,7 @@ class TestBuildParser:
         assert args.pages is None
         assert args.start == 2019
         assert args.stop == 2020
-        assert args.output == "articles.csv"
+        assert args.output == "data/articles.csv"
 
     def test_pages_is_int(self):
         """--pages accepts an integer."""

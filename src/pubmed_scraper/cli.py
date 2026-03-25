@@ -72,8 +72,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output",
         type=str,
-        default="articles.csv",
-        help='Output CSV filename. Default: "articles.csv"',
+        default="data/articles.csv",
+        help='Output CSV filename. Default: "data/articles.csv"',
     )
     return parser
 
